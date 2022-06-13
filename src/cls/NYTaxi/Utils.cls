@@ -6,6 +6,7 @@ ClassMethod Truncate() As %Status
     do ..Start()
     &SQL(TRUNCATE TABLE NYTaxi.Rides)
     &SQL(TRUNCATE TABLE NYTaxi.RowRides)
+    &SQL(TRUNCATE TABLE NYTaxi.Zones)
     do ..Stop()
     quit $$$OK
 }
@@ -20,7 +21,7 @@ ClassMethod Load(directory As %String) As %Status
             do ..Log("Loading data for table "_table)
             set tt = $zh
 
-            quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,'*.csv')", .rs, directory)
+            quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,'yellow_*.csv')", .rs, directory)
             while rs.%Next() {
                 set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_rs.%Get("Name")_"' INTO "_table_" USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
                 quit:..SQL("Loading file "_rs.%Get("ItemName"), sql)
@@ -32,7 +33,11 @@ ClassMethod Load(directory As %String) As %Status
             do ..SQL("Gathering table sizes", "CALL bdb_sql.TableSize(?)", .rs, table)
             do rs.%Display()
             do ..Log()
-        }        
+        }
+
+        set separator = $s($$$isWINDOWS:"\", 1:"/")
+        set zonesFile = directory_$s($e(directory,*)=separator:"", 1:separator)_"taxi_zones.csv"
+        do ..SQL("Loading taxi zones from "_zonesFile, "LOAD BULK %NOJOURN DATA FROM FILE '"_zonesFile_"' COLUMNS (ObjectID INT, Shape_Length DOUBLE, Geometry CLOB, Shape_Area DOUBLE, Zone VARCHAR(300), LocationID INT, borough VARCHAR(300)) INTO NYTaxi.Zones")   
         
     } catch (ex) {
         set sc = ex.AsStatus()
