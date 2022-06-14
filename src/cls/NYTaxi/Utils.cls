@@ -117,4 +117,9 @@ ClassMethod Log(message As %String = "", level As %String = "INFO") [ Internal ]
 
 Parameter LOGFILE = "ColumnarTesting.log";
 
+ClassMethod GloRefs() As %Integer [ SqlName = GloRefs, SqlProc ]
+{
+    quit $zu(61,43,$zu(61)) + $SYSTEM.Context.WorkMgr().GlobalReferences
+}
+
 }
