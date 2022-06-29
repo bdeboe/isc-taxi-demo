@@ -126,4 +126,18 @@ ClassMethod GloRefs() As %Integer [ SqlName = GloRefs, SqlProc ]
     quit $zu(61,43,$zu(61)) + $SYSTEM.Context.WorkMgr().GlobalReferences
 }
 
+ClassMethod LogicalBytes() As %Integer [ SqlName = LogicalBytes, SqlProc ]
+{
+    new $namespace
+    set $namespace = "%SYS"
+    quit ##class(SYS.Stats.Global).Sample().LogicalBlocks * 8
+}
+
+ClassMethod PhysicalBytes() As %Integer [ SqlName = PhysicalBytes, SqlProc ]
+{
+    new $namespace
+    set $namespace = "%SYS"
+    quit ##class(SYS.Stats.Global).Sample().PhysBlockReads * 8
+}
+
 }
