@@ -26,8 +26,9 @@ ClassMethod Load(directory As %String) As %Status
                 set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_rs.%Get("Name")_"' INTO "_table_" USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
                 quit:..SQL("Loading file "_rs.%Get("ItemName"), sql)
             }
-            quit:..SQL("Building indices","BUILD INDEX FOR TABLE "_table)
             do ..Log("Finished loading "_table_" in "_$fnumber($zh-tt,"",2)_"s")
+            quit:..SQL("Building indices","BUILD INDEX FOR TABLE "_table)
+            quit:..SQL("Gathering table stats","TUNE TABLE "_table)
             do ..Log()
 
             // if you have the latest bdb-sql-utils module from OpenExchange
