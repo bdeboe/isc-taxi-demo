@@ -21,8 +21,9 @@ ClassMethod Load(directory As %String) As %Status
             do ..Log("Loading data for table "_table)
             set tt = $zh
 
-            quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,'yellow_*.csv')", .rs, directory)
+            quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,'*.csv')", .rs, directory)
             while rs.%Next() {
+                continue:rs.%Get("ItemName")="taxi_zones.csv"
                 set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_rs.%Get("Name")_"' INTO "_table_" USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
                 quit:..SQL("Loading file "_rs.%Get("ItemName"), sql)
             }

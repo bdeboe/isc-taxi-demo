@@ -4,7 +4,7 @@ This repository includes scripts to load New York Taxi trip datasets into InterS
 
 ## Setting up
 
-1. First download one or more YellowCab trip datae files from the [City of New York Open Data portal](https://data.cityofnewyork.us/browse?Dataset-Information_Agency=Taxi+and+Limousine+Commission+%28TLC%29&) and store them in the `/data` subfolder of this repository.
+1. First download one or more YellowCab trip data files from the [City of New York Open Data portal](https://data.cityofnewyork.us/browse?Dataset-Information_Agency=Taxi+and+Limousine+Commission+%28TLC%29&) (use the "export" button and choose CSV) and store them in the `/data` subfolder of this repository. In case you're downloading the files from a different source, please make sure to verify if it has a header and the columns correspond to those in the `NYTaxi.Rides` table.
 
 2. Import the contents of this repository into your InterSystems IRIS 2022.2+ instance. 
 
