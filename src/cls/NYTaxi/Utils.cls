@@ -11,7 +11,7 @@ ClassMethod Truncate() As %Status
     quit $$$OK
 }
 
-ClassMethod Load(directory As %String) As %Status
+ClassMethod Load(directory As %String, pattern = "*.csv") As %Status
 {
     do ..Start()
     set sc = $$$OK
@@ -21,10 +21,14 @@ ClassMethod Load(directory As %String) As %Status
             do ..Log("Loading data for table "_table)
             set tt = $zh
 
-            quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,'*.csv')", .rs, directory)
+            quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,?)", .rs, directory, pattern)
             while rs.%Next() {
                 continue:rs.%Get("ItemName")="taxi_zones.csv"
-                set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_rs.%Get("Name")_"' INTO "_table_" USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
+                set f = ##class(%Stream.FileCharacter).%New()
+                do f.LinkToFile(rs.%Get("Name"))
+                set header = f.ReadLine()
+                kill f
+                set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_rs.%Get("Name")_"' INTO "_table_" ("_header_") USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
                 quit:..SQL("Loading file "_rs.%Get("ItemName"), sql)
             }
             do ..Log("Finished loading "_table_" in "_$fnumber($zh-tt,"",2)_"s")
