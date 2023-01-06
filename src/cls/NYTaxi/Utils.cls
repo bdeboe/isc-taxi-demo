@@ -44,12 +44,15 @@ ClassMethod Load(directory As %String, pattern = "*.csv") As %Status
             }
         }
 
-        set separator = $s($$$isWINDOWS:"\", 1:"/")
-        set zonesFile = directory_$s($e(directory,*)=separator:"", 1:separator)_"taxi_zones.csv"
-        if ##class(%File).Exists(zonesFile) {
-            do ..SQL("Loading taxi zones from "_zonesFile, "LOAD BULK %NOJOURN DATA FROM FILE '"_zonesFile_"' COLUMNS (ObjectID INT, Shape_Length DOUBLE, Geometry CLOB, Shape_Area DOUBLE, Zone VARCHAR(300), LocationID INT, borough VARCHAR(300)) INTO NYTaxi.Zones")   
-        } else {
-            do ..Log("No source file with taxi zones. Please check the /data folder of this repo if you haven't loaded this before","WARNING")
+        &SQL(SELECT COUNT(*) INTO :hasZones FROM NYTaxi.Zones)
+        if '$g(hasZones) {
+            set separator = $s($$$isWINDOWS:"\", 1:"/")
+            set zonesFile = directory_$s($e(directory,*)=separator:"", 1:separator)_"taxi_zones.csv"
+            if ##class(%File).Exists(zonesFile) {
+                do ..SQL("Loading taxi zones from "_zonesFile, "LOAD BULK %NOJOURN DATA FROM FILE '"_zonesFile_"' COLUMNS (ObjectID INT, Shape_Length DOUBLE, Geometry CLOB, Shape_Area DOUBLE, Zone VARCHAR(300), LocationID INT, borough VARCHAR(300)) INTO NYTaxi.Zones")   
+            } else {
+                do ..Log("No source file with taxi zones. Please check the /data folder of this repo if you haven't loaded this before","WARNING")
+            }
         }
         
     } catch (ex) {
