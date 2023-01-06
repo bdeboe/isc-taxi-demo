@@ -1,8 +1,31 @@
 # The New York Taxi dataset, columnar style
 
-This repository includes scripts to load New York Taxi trip datasets into InterSystems IRIS and leverages the new 2022.2 Columnar Storage option. 
+This repository includes scripts to load New York Taxi trip datasets into InterSystems IRIS and leverages the new 2022.2 Columnar Storage option.
 
-## Setting up
+Note: Before loading this package, please verify you're running an IRIS release of 2022.2 or above and have a license that enables Columnar Storage (either Community Edition or Advanced Server).
+
+## Setting up with IPM
+
+1. Install the bdb-nytaxi module using [IPM](https://github.com/intersystems/ipm)
+
+```ObjectScript
+USER> zpm
+
+zpm:USER> install bdb-nytaxi
+```
+
+   This will create the handful of tables used in the demo and populate them with the contents of the `./data` folder, which has a small sample of taxi ride data and the list of taxi zones referenced in the rides data.
+
+2. Now download as many YellowCab trip data files as you'd like from the [City of New York Open Data portal](https://data.cityofnewyork.us/browse?Dataset-Information_Agency=Taxi+and+Limousine+Commission+%28TLC%29&) (use the "export" button and choose CSV). In case you're downloading the files from a different source, please make sure to verify if it has a header and the columns correspond to those in the `NYTaxi.Rides` table.
+
+3. Run the following command to load:
+
+    ```ObjectScript
+    do ##class(NYTaxi.Utils).Load("/path/to/your/download")
+    ```
+
+
+## Setting up - oldschool
 
 1. First download one or more YellowCab trip data files from the [City of New York Open Data portal](https://data.cityofnewyork.us/browse?Dataset-Information_Agency=Taxi+and+Limousine+Commission+%28TLC%29&) (use the "export" button and choose CSV) and store them in the `./data` subfolder of this repository. In case you're downloading the files from a different source, please make sure to verify if it has a header and the columns correspond to those in the `NYTaxi.Rides` table.
 
