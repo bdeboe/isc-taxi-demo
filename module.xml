@@ -1,0 +1,28 @@
+
+<Export generator="IRIS" version="26">
+  <Document name="bdb-nytaxi.ZPM">
+    <Module>
+      <Name>bdb-nytaxi</Name>
+      <Version>0.1.1</Version>
+      <Description>A demo bundle for testing Columnar Storage on InterSystems IRIS, using the well-known New York Taxi dataset.</Description>
+      <Packaging>module</Packaging>
+      
+      <Dependencies>
+        <ModuleReference>
+          <Name>bdb-sql-utils</Name>
+          <Version>0.5.*</Version>
+        </ModuleReference>
+      </Dependencies>
+
+      <SourcesRoot>src</SourcesRoot>
+      
+      <Resource Name="NYTaxi.PKG"/>
+
+      <!-- kick off initial load. There's not much data in here without downloading more, but at least the zones will be in place -->
+      <Invoke Class="NYTaxi.Utils" Method="Load" >
+        <Arg>${root}/data</Arg>
+      </Invoke>
+      
+    </Module>
+  </Document>
+</Export>
