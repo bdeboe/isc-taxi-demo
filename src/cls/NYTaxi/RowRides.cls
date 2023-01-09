@@ -147,10 +147,4 @@ Storage Default
 <Type>%Storage.Persistent</Type>
 }
 
-Trigger NOOP [ Event = INSERT, Foreach = row ]
-{
- // NOOP to avoid FastINSERT date validation
- quit $$$OK
-}
-
 }
