@@ -21,15 +21,25 @@ ClassMethod Load(directory As %String, pattern = "*.csv") As %Status
             do ..Log("Loading data for table "_table)
             set tt = $zh
 
-            quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,?)", .rs, directory, pattern)
-            while rs.%Next() {
-                continue:rs.%Get("ItemName")="taxi_zones.csv"
+            // if this is not a directory, it may be just a file!
+            if ##class(%File).Exists(directory) && '##class(%File).DirectoryExists(directory) {
                 set f = ##class(%Stream.FileCharacter).%New()
-                do f.LinkToFile(rs.%Get("Name"))
+                do f.LinkToFile(directory)
                 set header = f.ReadLine()
                 kill f
-                set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_rs.%Get("Name")_"' INTO "_table_" ("_header_") USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
-                quit:..SQL("Loading file "_rs.%Get("ItemName"), sql)
+                set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_directory_"' INTO "_table_" ("_header_") USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
+                quit:..SQL("Loading file "_directory, sql)
+            } else {
+                quit:..SQL("Fetching directory listing for "_directory, "CALL %Library.File_FileSet(?,?)", .rs, directory, pattern)
+                while rs.%Next() {
+                    continue:rs.%Get("ItemName")="taxi_zones.csv"
+                    set f = ##class(%Stream.FileCharacter).%New()
+                    do f.LinkToFile(rs.%Get("Name"))
+                    set header = f.ReadLine()
+                    kill f
+                    set sql = "LOAD BULK %NOJOURN DATA FROM FILE '"_rs.%Get("Name")_"' INTO "_table_" ("_header_") USING '{ ""from"": {""file"": {""columnseparator"":"","", ""header"": true } } }'"
+                    quit:..SQL("Loading file "_rs.%Get("ItemName"), sql)
+                }
             }
             do ..Log("Finished loading "_table_" in "_$fnumber($zh-tt,"",2)_"s")
             quit:..SQL("Building indices","BUILD INDEX FOR TABLE "_table)
