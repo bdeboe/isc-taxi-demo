@@ -1,3 +1,5 @@
+![Repo-GitHub](https://img.shields.io/badge/dynamic/xml?color=blue&label=ZPM%20version&version&prefix=v&query=%2F%2FVersion&url=https%3A%2F%2Fraw.githubusercontent.com%2Fbdeboe%2Fisc-taxi-demo%2Fmaster%2Fmodule.xml)
+
 # The New York Taxi dataset, columnar style
 
 This repository includes scripts to load New York Taxi trip datasets into InterSystems IRIS and leverages the new [Columnar Storage](https://learning.intersystems.com/course/view.php?id=2112) option.
@@ -11,7 +13,7 @@ docker-compose build
 docker-compose up
 ```
 
-Running the container will publish the Jupyter server on port 8888, so you can access it at http://localhost:8888/. See [below](#demo-notebooks) for more on the demo notebooks.
+Running the container will publish the Jupyter server on port 8888, so you can access it at http://localhost:8888/. See [below](#the-demo-notebooks) for more on the demo notebooks.
 
 
 ## Loading into your own instance
