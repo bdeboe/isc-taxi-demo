@@ -1,0 +1,6 @@
+zn "%SYS"
+do ##class(Security.Users).UnExpireUserPasswords("*")
+zn "USER"
+zpm "install bdb-nytaxi"
+do ##class(NYTaxi.Utils).Load("/opt/irisbuild/data/")
+halt

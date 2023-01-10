@@ -1,0 +1,27 @@
+version: '3.6'
+services:
+  iris:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: --check-caps false --ISCAgent false
+    restart: always
+    hostname: iris
+    ports:
+      - 41773:1972
+      - 42773:52773
+
+  jupyter:
+    build: 
+      context: .
+      dockerfile: Dockerfile-Jupyter
+    restart: always
+    hostname: jupyter
+    environment:
+      ISC_TAXI_HOSTNAME: iris
+      ISC_TAXI_PORT: 1972
+      ISC_TAXI_NAMESPACE: USER
+      ISC_TAXI_USER: _SYSTEM
+      ISC_TAXI_PASSWORD: SYS
+    ports:
+      - 8888:8888

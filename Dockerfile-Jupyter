@@ -1,0 +1,11 @@
+FROM jupyter/base-notebook
+
+RUN pip install pandas numpy matplotlib && \
+    wget --continue https://github.com/intersystems-community/iris-driver-distribution/raw/main/DB-API/intersystems_irispython-3.2.0-py3-none-any.whl && \
+    pip install intersystems_irispython-3.2.0-py3-none-any.whl && \
+    rm intersystems_irispython-3.2.0-py3-none-any.whl
+
+COPY src/python/demo* "${HOME}"
+
+# run without password
+CMD start.sh jupyter lab --LabApp.token=''
