@@ -3,7 +3,7 @@
   <Document name="bdb-nytaxi.ZPM">
     <Module>
       <Name>bdb-nytaxi</Name>
-      <Version>0.1.4</Version>
+      <Version>0.1.5</Version>
       <Description>A demo bundle for testing Columnar Storage on InterSystems IRIS, using the well-known New York Taxi dataset.</Description>
       <Packaging>module</Packaging>
       
