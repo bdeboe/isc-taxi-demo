@@ -80,7 +80,7 @@ Then copy or point your notebook folder at the contents of the `./src/python/` d
 
 By now you should be ready to open `demo.ipynb` in your Jupyter or Jupyter-lab instance, edit your connection settings and play the paragraphs!
 
-There are several variants of the notebooks trying out different flavours of queries, but most should be self-explanatory after running through the main one. 
+There are several variants of the notebooks trying out different flavours of queries that I used in demos such as at Global Summit 2022. Not all of these are relevant to run with the environment set up through the scripts in this repository, but as they are fully rendered, the output and description may provide helpful insights. Specifically, the colobench notebook was run on a much larger dataset hosted on a beefy server in our private datacenter.
 
 :warning: The queries assume you loaded NY Taxi trip data for January through March 2020. If you loaded a different set of files, your results may differ from what's in the bundled notebooks.
 
